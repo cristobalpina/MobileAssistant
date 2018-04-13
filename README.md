@@ -1,3 +1,3 @@
 # Mobile Assistant
 
-![alt text](filename.png "Description goes here")
+![alt text](Diagram2.png "Description goes here")
