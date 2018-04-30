@@ -1,6 +1,6 @@
 # Mobile Assistant
 #video
- https://youtu.be/WyKbBC8EsSs
+https://www.screencast.com/t/9MGGwxapAX5
 
 ![alt text](media/uml.png "UMl of the proyect")
 
