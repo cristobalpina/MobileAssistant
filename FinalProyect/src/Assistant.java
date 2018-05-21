@@ -8,7 +8,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class Assistant extends Application {
@@ -23,11 +25,21 @@ public class Assistant extends Application {
 	}
 	
 	public void getCall(){
-		System.out.println("get Call");
+		if(this.busy) {
+			System.out.println("Call added to missed calls");
+			missedCalls.add(new Call("Someone"));
+			return;
+		}
+		System.out.println("Calling");
 	}
 
 	public void getNews(){
-		System.out.println("get News");
+		if(this.busy) {
+			System.out.println("News added to missed news");
+			missedNews.add(new News("Something happend"));
+			return;
+		}
+		System.out.println("News incoming");
 	}
 	
 	public boolean getBusy() {
@@ -35,13 +47,23 @@ public class Assistant extends Application {
 	}
 	
 	public void setBusy(boolean value){
+		if(this.busy) {
+			this.clearPendingCalls();
+			this.clearPendingNews();
+		}
 		this.busy = value;
-		System.out.println("setting busy to " + value);
+		
 	}
 	
-	public void displayNotifications() {
-		System.out.println("Yo have " + missedCalls.size() + "missed calls");
-		System.out.println("Yo have " + missedNews.size() + "missed news");
+	public LinkedList<Text> getNotifications() {
+		LinkedList<Text> notifications = new LinkedList<Text>();
+		System.out.println(this.missedCalls.size());
+		for(int i = 0; i < this.missedCalls.size(); i++) {
+			String from = this.missedCalls.get(i).getFrom();
+			notifications.add(new Text("Missed call from: " + from));
+		}
+		System.out.println(notifications);
+		return notifications;
 	}
 	
 	public void clearPendingCalls() {
@@ -62,9 +84,15 @@ public class Assistant extends Application {
         footer.setSpacing(10);
         footer.setStyle("-fx-background-color: #dcdcdc;" + 
         "-fx-border-color: #000000;" + "-fx-border-width: 2;");
-        
-     
         return footer;
+	}
+	public VBox addBody() {
+		VBox body = new VBox();
+        body.setPadding(new Insets(25, 12, 25, 12));
+        body.setSpacing(10);
+        body.setStyle("-fx-background-color: #dcdcdc;" + 
+        "-fx-border-color: #000000;" + "-fx-border-width: 2;");
+        return body;
 	}
 	
 	@Override
@@ -75,25 +103,54 @@ public class Assistant extends Application {
         
         BorderPane border = new BorderPane();
         HBox footer = addFooter();
+        VBox body = addBody();
+        Circle circle = new Circle(10, 10, 10);
+        circle.setFill(javafx.scene.paint.Color.GREEN);
         
-        Button toggleBtn = new Button("Toggle");
+        Button toggleBtn = new Button("Not Busy");
         toggleBtn.setPrefSize(100, 20);
         toggleBtn.setOnAction(new EventHandler<ActionEvent>() {
         	@Override public void handle(ActionEvent e) {
         		boolean currentState = assistant.getBusy();
+        		if(assistant.getBusy()) {	
+        			toggleBtn.setText("Not Busy");
+        			circle.setFill(javafx.scene.paint.Color.GREEN);
+        			LinkedList<Text> notifications = assistant.getNotifications();
+        			System.out.println(notifications);
+        			body.getChildren().clear();
+        			body.getChildren().addAll(notifications);
+        		}
+        		else {
+        			toggleBtn.setText("Busy");
+        			circle.setFill(javafx.scene.paint.Color.RED);
+        			body.getChildren().clear();
+        			
+        		}
         		assistant.setBusy(!currentState);
+        		
         	}
         });
         
-        Circle circle = new Circle(10, 10, 10);
+        Button callBtn = new Button("Get Call");
+        callBtn.setPrefSize(100, 20);
+        callBtn.setOnAction(new EventHandler<ActionEvent>() {
+        	@Override public void handle(ActionEvent e) { 		
+        		assistant.getCall();
+        	}
+        });
+        Button newsBtn = new Button("Get News");
+        newsBtn.setPrefSize(100, 20);
+        newsBtn.setOnAction(new EventHandler<ActionEvent>() {
+        	@Override public void handle(ActionEvent e) { 		
+        		assistant.getNews();
+        	}
+        });
         
-        circle.setFill(assistant.getBusy() ? javafx.scene.paint.Color.RED : javafx.scene.paint.Color.GREEN);
-        
-        footer.getChildren().addAll(toggleBtn, circle);
+        footer.getChildren().addAll(newsBtn, callBtn, toggleBtn, circle);
         footer.setAlignment(Pos.CENTER_RIGHT);
         
         border.setBottom(footer);
-        
+        border.setCenter(body);
         primaryStage.setScene(new Scene(border, 600, 400));
         primaryStage.show();
     }
