@@ -1,0 +1,5 @@
+1.- Code
+
+2.- Because Java int max value is 2.147.483.648
+
+3.- BigInteger is immutable

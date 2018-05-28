@@ -1,0 +1,18 @@
+1.-
+
+Main:
+  box1 -> (2, 4 7, 9)
+  p1 -> (5, 8)
+  box1 -> (2, 4, 8, 10)
+  p2 -> (6, 9)
+
+findCenter:
+  x -> 5
+  y -> 8
+  x -> 6
+  y -> 9
+
+2.- (5, 8)
+    (6, 9)
+
+3.- No, they point to different variables because each Point was a new Point()

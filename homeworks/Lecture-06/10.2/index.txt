@@ -1,0 +1,16 @@
+Main:
+	blank -> (5, 8)
+	rect -> (0, 2, 4, 4)
+	center -> (2, 4)
+	dist -> 5
+
+findCenter:
+	box -> (0, 2, 4, 4)
+	x -> 2
+	y -> 4
+distance:
+	p1 -> (2, 4)
+	p2 -> (5, 8)
+
+
+Output: 5.0

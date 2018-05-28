@@ -1,0 +1,16 @@
+main
+x -> 5
+blank -> (1, 2)
+
+riddle
+x -> 5
+p -> (1, 2)
+x->12
+
+Output
+15
+5
+1
+2
+
+mutable, point has a method to set new params
