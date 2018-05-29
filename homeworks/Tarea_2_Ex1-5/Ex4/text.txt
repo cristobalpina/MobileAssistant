@@ -1,0 +1,6 @@
+2.- mistery (2, 25) = 50
+    mistery(3, 11) = 33
+
+3.- Given int a and int b, return a times b
+
+4.- returns a power b
