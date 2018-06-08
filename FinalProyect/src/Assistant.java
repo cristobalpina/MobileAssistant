@@ -17,143 +17,158 @@ public class Assistant extends Application {
 	private boolean busy;
 	private LinkedList<Call> missedCalls;
 	private LinkedList<News> missedNews;
-	
+
 	public Assistant() {
 		this.busy = false;
 		this.missedCalls = new LinkedList<Call>();
 		this.missedNews = new LinkedList<News>();
 	}
-	
-	public void getCall(){
-		if(this.busy) {
+
+	public void getCall() {
+		if (this.busy) {
 			System.out.println("Call added to missed calls");
-			missedCalls.add(new Call("Someone"));
+			missedCalls.add(new Call());
 			return;
 		}
-		System.out.println("Calling");
+		System.out.println(new Call().getFrom() + " esta llamando.");
 	}
 
-	public void getNews(){
-		if(this.busy) {
+	public void getNews() {
+		if (this.busy) {
 			System.out.println("News added to missed news");
-			missedNews.add(new News("Something happend"));
+			missedNews.add(new News());
 			return;
 		}
 		System.out.println("News incoming");
 	}
-	
+
 	public boolean getBusy() {
 		return this.busy;
 	}
-	
-	public void setBusy(boolean value){
-		if(this.busy) {
+
+	public void setBusy(boolean value) {
+		if (this.busy) {
 			this.clearPendingCalls();
 			this.clearPendingNews();
 		}
 		this.busy = value;
-		
+
 	}
-	
+
 	public LinkedList<Text> getNotifications() {
 		LinkedList<Text> notifications = new LinkedList<Text>();
 		System.out.println(this.missedCalls.size());
-		for(int i = 0; i < this.missedCalls.size(); i++) {
+		for (int i = 0; i < this.missedCalls.size(); i++) {
 			String from = this.missedCalls.get(i).getFrom();
 			notifications.add(new Text("Missed call from: " + from));
+		}
+		for (int i = 0; i < this.missedNews.size(); i++) {
+			String title = this.missedNews.get(i).getTitle();
+			notifications.add(new Text("Missed News: " + title));
 		}
 		System.out.println(notifications);
 		return notifications;
 	}
-	
+
 	public void clearPendingCalls() {
 		missedCalls.clear();
 	}
-	
+
 	public void clearPendingNews() {
 		missedNews.clear();
 	}
-	
+
 	public static void main(String[] args) {
 		launch(args);
 	}
-	
+
 	public HBox addFooter() {
 		HBox footer = new HBox();
-        footer.setPadding(new Insets(25, 12, 25, 12));
-        footer.setSpacing(10);
-        footer.setStyle("-fx-background-color: #dcdcdc;" + 
-        "-fx-border-color: #000000;" + "-fx-border-width: 2;");
-        return footer;
+		footer.setPadding(new Insets(25, 12, 25, 12));
+		footer.setSpacing(10);
+		footer.setStyle("-fx-background-color: #dcdcdc;" + "-fx-border-color: #000000;" + "-fx-border-width: 2;");
+		return footer;
 	}
+
 	public VBox addBody() {
 		VBox body = new VBox();
-        body.setPadding(new Insets(25, 12, 25, 12));
-        body.setSpacing(10);
-        body.setStyle("-fx-background-color: #dcdcdc;" + 
-        "-fx-border-color: #000000;" + "-fx-border-width: 2;");
-        return body;
+		body.setPadding(new Insets(25, 12, 25, 12));
+		body.setSpacing(10);
+		body.setStyle("-fx-background-color: #dcdcdc;" + "-fx-border-color: #000000;" + "-fx-border-width: 2;");
+		return body;
 	}
-	
+
 	@Override
-    public void start(Stage primaryStage) {
+	public void start(Stage primaryStage) {
 		Assistant assistant = new Assistant();
-        
+
 		primaryStage.setTitle("Mobile Assistant");
-        
-        BorderPane border = new BorderPane();
-        HBox footer = addFooter();
-        VBox body = addBody();
-        Circle circle = new Circle(10, 10, 10);
-        circle.setFill(javafx.scene.paint.Color.GREEN);
-        
-        Button toggleBtn = new Button("Not Busy");
-        toggleBtn.setPrefSize(100, 20);
-        toggleBtn.setOnAction(new EventHandler<ActionEvent>() {
-        	@Override public void handle(ActionEvent e) {
-        		boolean currentState = assistant.getBusy();
-        		if(assistant.getBusy()) {	
-        			toggleBtn.setText("Not Busy");
-        			circle.setFill(javafx.scene.paint.Color.GREEN);
-        			LinkedList<Text> notifications = assistant.getNotifications();
-        			System.out.println(notifications);
-        			body.getChildren().clear();
-        			body.getChildren().addAll(notifications);
-        		}
-        		else {
-        			toggleBtn.setText("Busy");
-        			circle.setFill(javafx.scene.paint.Color.RED);
-        			body.getChildren().clear();
-        			
-        		}
-        		assistant.setBusy(!currentState);
-        		
-        	}
-        });
-        
-        Button callBtn = new Button("Get Call");
-        callBtn.setPrefSize(100, 20);
-        callBtn.setOnAction(new EventHandler<ActionEvent>() {
-        	@Override public void handle(ActionEvent e) { 		
-        		assistant.getCall();
-        	}
-        });
-        Button newsBtn = new Button("Get News");
-        newsBtn.setPrefSize(100, 20);
-        newsBtn.setOnAction(new EventHandler<ActionEvent>() {
-        	@Override public void handle(ActionEvent e) { 		
-        		assistant.getNews();
-        	}
-        });
-        
-        footer.getChildren().addAll(newsBtn, callBtn, toggleBtn, circle);
-        footer.setAlignment(Pos.CENTER_RIGHT);
-        
-        border.setBottom(footer);
-        border.setCenter(body);
-        primaryStage.setScene(new Scene(border, 600, 400));
-        primaryStage.show();
-    }
-	
-	
+
+		BorderPane border = new BorderPane();
+		HBox footer = addFooter();
+		VBox body = addBody();
+		Circle circle = new Circle(10, 10, 10);
+		circle.setFill(javafx.scene.paint.Color.GREEN);
+
+		Button toggleBtn = new Button("Not Busy");
+		toggleBtn.setPrefSize(100, 20);
+		toggleBtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				boolean currentState = assistant.getBusy();
+				if (assistant.getBusy()) {
+					toggleBtn.setText("Not Busy");
+					circle.setFill(javafx.scene.paint.Color.GREEN);
+					LinkedList<Text> notifications = assistant.getNotifications();
+					System.out.println(notifications);
+					body.getChildren().clear();
+					body.getChildren().addAll(notifications);
+				} else {
+					toggleBtn.setText("Busy");
+					circle.setFill(javafx.scene.paint.Color.RED);
+					body.getChildren().clear();
+
+				}
+				assistant.setBusy(!currentState);
+
+			}
+		});
+
+		Button callBtn = new Button("Get Call");
+		callBtn.setPrefSize(100, 20);
+		callBtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				if (assistant.getBusy()) {
+					assistant.getCall();
+				} else {
+					body.getChildren().clear();
+					body.getChildren().addAll(new Text(new Call().getRandomFrom() + " is calling."));
+				}
+			}
+		});
+		Button newsBtn = new Button("Get News");
+		newsBtn.setPrefSize(100, 20);
+		newsBtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				if (assistant.getBusy()) {
+					assistant.getNews();
+				} else {
+					body.getChildren().clear();
+					body.getChildren().addAll(new Text(new News().getRandomTitle()));
+				}
+
+			}
+		});
+
+		footer.getChildren().addAll(newsBtn, callBtn, toggleBtn, circle);
+		footer.setAlignment(Pos.CENTER_RIGHT);
+
+		border.setBottom(footer);
+		border.setCenter(body);
+		primaryStage.setScene(new Scene(border, 600, 400));
+		primaryStage.show();
+	}
+
 }
